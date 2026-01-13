@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import axios from 'axios';
 import type { AxiosInstance } from 'axios';
 

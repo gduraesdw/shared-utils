@@ -101,24 +101,26 @@ export function throttle<T extends (...args: unknown[]) => unknown>(
 ): (...args: Parameters<T>) => void {
   let inThrottle = false;
   let lastArgs: Parameters<T> | null = null;
-  let lastContext: unknown = null;
+  let lastThis: unknown = null;
 
-  return function (this: unknown, ...args: Parameters<T>) {
+  return function throttled(this: unknown, ...args: Parameters<T>) {
+    const context = this;
+
     if (!inThrottle) {
-      fn.apply(this, args);
+      fn.apply(context, args);
       inThrottle = true;
 
       setTimeout(() => {
         inThrottle = false;
         if (lastArgs !== null) {
-          fn.apply(lastContext, lastArgs);
+          fn.apply(lastThis, lastArgs);
           lastArgs = null;
-          lastContext = null;
+          lastThis = null;
         }
       }, limit);
     } else {
       lastArgs = args;
-      lastContext = this;
+      lastThis = context;
     }
   };
 }
